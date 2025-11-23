@@ -18,10 +18,10 @@ const BestSeller = () => {
                 width={17}
                 height={17}
               />
-              This Month
+              Esse Mês
             </span>
             <h2 className="font-semibold text-xl xl:text-heading-5 text-dark">
-              Best Sellers
+              Mais Vendidos
             </h2>
           </div>
         </div>
