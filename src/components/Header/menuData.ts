@@ -17,13 +17,13 @@ export async function menuData(): Promise<Menu[]> {
     id: cat.id,
     title: cat.name,
     newTab: false,
-    path: cat.url ? `/${cat.url}` : "/",
+    path: cat.url ? `/categorias/${cat.url}` : "/",
     submenu:
       cat.children?.map((sub: any) => ({
         id: sub.id,
         title: sub.name,
         newTab: false,
-        path: sub.url ? `/${sub.url}` : "/",
+        path: sub.url ? `/categorias/${cat.url}/${sub.url}` : "/",
       })) || [],
   }));
 

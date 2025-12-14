@@ -16,7 +16,7 @@ const PriceDropdown = () => {
         onClick={() => setToggleDropdown(!toggleDropdown)}
         className="cursor-pointer flex items-center justify-between py-3 pl-6 pr-5.5"
       >
-        <p className="text-dark">Price</p>
+        <p className="text-dark">Preço</p>
         <button
           onClick={() => setToggleDropdown(!toggleDropdown)}
           id="price-dropdown-btn"
@@ -62,7 +62,7 @@ const PriceDropdown = () => {
             <div className="price-amount flex items-center justify-between pt-4">
               <div className="text-custom-xs text-dark-4 flex rounded border border-gray-3/80">
                 <span className="block border-r border-gray-3/80 px-2.5 py-1.5">
-                  $
+                  R$
                 </span>
                 <span id="minAmount" className="block px-3 py-1.5">
                   {selectedPrice.from}
@@ -71,7 +71,7 @@ const PriceDropdown = () => {
 
               <div className="text-custom-xs text-dark-4 flex rounded border border-gray-3/80">
                 <span className="block border-r border-gray-3/80 px-2.5 py-1.5">
-                  $
+                  R$
                 </span>
                 <span id="maxAmount" className="block px-3 py-1.5">
                   {selectedPrice.to}

@@ -7,7 +7,7 @@ export type ProductCard = {
   id: number;
   title: string;
   url: string;
-  image: string; // preview principal
+  image: string;
   discountedPrice: number;
   reviews: number;
   price: number;
@@ -45,7 +45,7 @@ const NewArrival = () => {
   }, []);
 
   return (
-    <section className="overflow-hidden pt-15">
+    <section className="overflow-hidden pt-15 bg-[#F6F7FB]">
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
 
         {/* Cabeçalho */}
@@ -91,10 +91,10 @@ const NewArrival = () => {
           {products.map((item) => (
             <Link
               key={item.id}
-              href={`/${item.url}`} // ← agora a rota é dinâmica
+              href={`/${item.url}`}
               className="block"
             >
-              <div className="text-center border rounded-lg p-3 hover:shadow-lg transition">
+              <div className="shadow-testimonial bg-white text-center p-3 hover:shadow-lg transition">
                 
                 {/* Wrapper com altura fixa */}
                 <div className="w-full h-[200px] relative overflow-hidden rounded-md">

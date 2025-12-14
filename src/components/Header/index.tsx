@@ -43,17 +43,6 @@ const Header = () => {
     window.addEventListener("scroll", handleStickyMenu);
   });
 
-  // const options = [
-  //   { label: "All Categories", value: "0" },
-  //   { label: "Desktop", value: "1" },
-  //   { label: "Laptop", value: "2" },
-  //   { label: "Monitor", value: "3" },
-  //   { label: "Phone", value: "4" },
-  //   { label: "Watch", value: "5" },
-  //   { label: "Mouse", value: "6" },
-  //   { label: "Tablet", value: "7" },
-  // ];
-
   return (
     <header
       className={`fixed left-0 top-0 w-full z-9999 bg-white transition-all ease-in-out duration-300 ${
@@ -306,7 +295,7 @@ const Header = () => {
                 `!visible bg-white shadow-lg border border-gray-3 !h-auto max-h-[400px] overflow-y-scroll rounded-md p-5`
               }`}
             >
-              {/* <!-- Main Nav Start --> */}
+              {/* <!-- Main Nav Start CATEGORIAS --> */} 
               <nav>
                 <ul className="flex xl:items-center flex-col xl:flex-row gap-5 xl:gap-6">
                   {menu.map((menuItem, i) =>
