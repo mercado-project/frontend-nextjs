@@ -29,12 +29,25 @@ const SingleItem = ({ item }: { item }) => {
     );
   };
 
+    const price = Number(item.prices?.[0]?.price ?? 0);
+
+    const promo = item.promotions?.find((p: any) => p.active === true);
+    const finalPrice = promo
+      ? Number(promo.promotionalPrice)
+      : price;
+
   const handleItemToWishList = () => {
     dispatch(
       addItemToWishlist({
-        ...item,
-        status: "available",
+        id: item.id,
+        name: item.name,
+        title: item.name,
+        url: item.url,
+        images: item.images,
+        price: price, 
+        discountedPrice: promo ? finalPrice : 0,
         quantity: 1,
+        status: "available",
       })
     );
   };

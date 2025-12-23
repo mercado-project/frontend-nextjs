@@ -20,21 +20,14 @@ const SingleGridItem = ({ item }: { item }) => {
     dispatch(updateQuickView({ ...item }));
   };
 
+
+  const priceNumber = Number(item.prices?.[0]?.price ?? 0);
+
   // add to cart
   const handleAddToCart = () => {
     dispatch(
       addItemToCart({
         ...item,
-        quantity: 1,
-      })
-    );
-  };
-
-  const handleItemToWishList = () => {
-    dispatch(
-      addItemToWishlist({
-        ...item,
-        status: "available",
         quantity: 1,
       })
     );
@@ -51,6 +44,22 @@ const SingleGridItem = ({ item }: { item }) => {
   const finalPrice = promo
     ? Number(promo.promotionalPrice)
     : price;
+    
+      const handleItemToWishList = () => {
+        dispatch(
+          addItemToWishlist({
+            id: item.id,
+            name: item.name,
+            title: item.name,
+            url: item.url,
+            images: item.images,
+            price: finalPrice, 
+            discountedPrice: promo ? finalPrice : 0,
+            quantity: 1,
+            status: "available",
+          })
+        );
+      };
 
 
   return (

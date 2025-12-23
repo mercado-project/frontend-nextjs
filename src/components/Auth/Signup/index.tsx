@@ -1,21 +1,103 @@
+"use client";
+
 import Breadcrumb from "@/components/Common/Breadcrumb";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Signup = () => {
+  const router = useRouter();
+
+  const [form, setForm] = useState({
+    fullName: "",
+    cpf: "",
+    phone: "",
+    birthDate: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    if (form.password !== form.confirmPassword) {
+      setError("As senhas não conferem");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      // 1️⃣ Cadastrar cliente
+      const customerResponse = await fetch("http://localhost:3002/customers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName: form.fullName,
+          cpf: form.cpf,
+          phone: form.phone,
+          birthDate: form.birthDate,
+        }),
+      });
+
+      if (!customerResponse.ok) {
+        throw new Error("Erro ao cadastrar cliente");
+      }
+
+      const customer = await customerResponse.json();
+
+      // 2️⃣ Cadastrar usuário
+      const userResponse = await fetch("http://localhost:3002/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: form.email,
+          passwordHash: form.password,
+          role: "customer",
+          customer: customer.id,
+        }),
+      });
+
+      if (!userResponse.ok) {
+        throw new Error("Erro ao cadastrar usuário");
+      }
+
+      alert("Conta criada com sucesso!");
+      router.push("/signin");
+    } catch (err: any) {
+      setError(err.message || "Erro inesperado");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Breadcrumb title={"Signup"} pages={["Signup"]} />
+
       <section className="overflow-hidden py-20 bg-gray-2">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="max-w-[570px] w-full mx-auto rounded-xl bg-white shadow-1 p-4 sm:p-7.5 xl:p-11">
             <div className="text-center mb-11">
               <h2 className="font-semibold text-xl sm:text-2xl xl:text-heading-5 text-dark mb-1.5">
-                Create an Account
+                Criar uma conta
               </h2>
-              <p>Enter your detail below</p>
+              <p>Insira as informações:</p>
             </div>
-
             <div className="flex flex-col gap-4.5">
               <button className="flex justify-center items-center gap-3.5 rounded-lg border border-gray-3 bg-gray-1 p-3 ease-out duration-200 hover:bg-gray-2">
                 <svg
@@ -61,7 +143,7 @@ const Signup = () => {
                     </clipPath>
                   </defs>
                 </svg>
-                Sign Up with Google
+                Cadastrar com Google
               </button>
 
               <button className="flex justify-center items-center gap-3.5 rounded-lg border border-gray-3 bg-gray-1 p-3 ease-out duration-200 hover:bg-gray-2">
@@ -77,89 +159,115 @@ const Signup = () => {
                     fill="#15171A"
                   />
                 </svg>
-                Sign Up with Github
+                Cadastrar com Github
               </button>
             </div>
 
-            <span className="relative z-1 block font-medium text-center mt-4.5">
-              <span className="block absolute -z-1 left-0 top-1/2 h-px w-full bg-gray-3"></span>
-              <span className="inline-block px-3 bg-white">Or</span>
-            </span>
-
             <div className="mt-5.5">
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="mb-5">
-                  <label htmlFor="name" className="block mb-2.5">
-                    Full Name <span className="text-red">*</span>
-                  </label>
-
+                  <label className="block mb-2.5">Nome Completo *</label>
                   <input
                     type="text"
-                    name="name"
-                    id="name"
-                    placeholder="Enter your full name"
-                    className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                    name="fullName"
+                    value={form.fullName}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-gray-3 bg-gray-1 py-3 px-5"
+                    required
                   />
                 </div>
 
                 <div className="mb-5">
-                  <label htmlFor="email" className="block mb-2.5">
-                    Email Address <span className="text-red">*</span>
-                  </label>
+                  <label className="block mb-2.5">CPF *</label>
+                  <input
+                    type="text"
+                    name="cpf"
+                    value={form.cpf}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-gray-3 bg-gray-1 py-3 px-5"
+                    required
+                  />
+                </div>
 
+                <div className="mb-5">
+                  <label className="block mb-2.5">Telefone *</label>
+                  <input
+                    type="text"
+                    name="phone"
+                    value={form.phone}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-gray-3 bg-gray-1 py-3 px-5"
+                    required
+                  />
+                </div>
+
+                <div className="mb-5">
+                  <label className="block mb-2.5">Data de Nascimento *</label>
+                  <input
+                    type="date"
+                    name="birthDate"
+                    value={form.birthDate}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-gray-3 bg-gray-1 py-3 px-5"
+                    required
+                  />
+                </div>
+
+                <div className="mb-5">
+                  <label className="block mb-2.5">Email *</label>
                   <input
                     type="email"
                     name="email"
-                    id="email"
-                    placeholder="Enter your email address"
-                    className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                    value={form.email}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-gray-3 bg-gray-1 py-3 px-5"
+                    required
                   />
                 </div>
 
                 <div className="mb-5">
-                  <label htmlFor="password" className="block mb-2.5">
-                    Password <span className="text-red">*</span>
-                  </label>
-
+                  <label className="block mb-2.5">Senha *</label>
                   <input
                     type="password"
                     name="password"
-                    id="password"
-                    placeholder="Enter your password"
-                    autoComplete="on"
-                    className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                    value={form.password}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-gray-3 bg-gray-1 py-3 px-5"
+                    required
                   />
                 </div>
 
                 <div className="mb-5.5">
-                  <label htmlFor="re-type-password" className="block mb-2.5">
-                    Re-type Password <span className="text-red">*</span>
-                  </label>
-
+                  <label className="block mb-2.5">Repita a Senha *</label>
                   <input
                     type="password"
-                    name="re-type-password"
-                    id="re-type-password"
-                    placeholder="Re-type your password"
-                    autoComplete="on"
-                    className="rounded-lg border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-3 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
+                    name="confirmPassword"
+                    value={form.confirmPassword}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-gray-3 bg-gray-1 py-3 px-5"
+                    required
                   />
                 </div>
 
+                {error && (
+                  <p className="text-red text-center mb-4">{error}</p>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full flex justify-center font-medium text-white bg-dark py-3 px-6 rounded-lg ease-out duration-200 hover:bg-blue mt-7.5"
+                  disabled={loading}
+                  className="w-full bg-dark text-white py-3 rounded-lg hover:bg-blue"
                 >
-                  Create Account
+                  {loading ? "Criando conta..." : "Criar conta"}
                 </button>
 
                 <p className="text-center mt-6">
-                  Already have an account?
+                  Já tem uma conta?
                   <Link
                     href="/signin"
-                    className="text-dark ease-out duration-200 hover:text-blue pl-2"
+                    className="text-dark hover:text-blue pl-2"
                   >
-                    Sign in Now
+                    Entre agora
                   </Link>
                 </p>
               </form>
@@ -172,3 +280,4 @@ const Signup = () => {
 };
 
 export default Signup;
+

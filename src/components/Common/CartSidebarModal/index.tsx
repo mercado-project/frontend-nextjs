@@ -45,7 +45,7 @@ const CartSidebarModal = () => {
         <div className="w-full max-w-[500px] shadow-1 bg-white px-4 sm:px-7.5 lg:px-11 relative modal-content">
           <div className="sticky top-0 bg-white flex items-center justify-between pb-7 pt-4 sm:pt-7.5 lg:pt-11 border-b border-gray-3 mb-7.5">
             <h2 className="font-medium text-dark text-lg sm:text-2xl">
-              Cart View
+              Carrinho
             </h2>
             <button
               onClick={() => closeCartModal()}
@@ -95,23 +95,24 @@ const CartSidebarModal = () => {
             <div className="flex items-center justify-between gap-5 mb-6">
               <p className="font-medium text-xl text-dark">Subtotal:</p>
 
-              <p className="font-medium text-xl text-dark">${totalPrice}</p>
+              <p className="font-medium text-xl text-dark">R$ {totalPrice.toFixed(2)}</p>
             </div>
 
             <div className="flex items-center gap-4">
               <Link
                 onClick={() => closeCartModal()}
-                href="/cart"
+                href="/carrinho"
                 className="w-full flex justify-center font-medium text-white bg-blue py-[13px] px-6 rounded-md ease-out duration-200 hover:bg-blue-dark"
               >
-                View Cart
+                Ver Carrinho
               </Link>
 
               <Link
+                onClick={() => closeCartModal()}
                 href="/checkout"
                 className="w-full flex justify-center font-medium text-white bg-dark py-[13px] px-6 rounded-md ease-out duration-200 hover:bg-opacity-95"
               >
-                Checkout
+                Finalizar Compra
               </Link>
             </div>
           </div>

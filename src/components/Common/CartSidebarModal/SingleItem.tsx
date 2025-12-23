@@ -15,6 +15,8 @@ const SingleItem = ({ item, removeItemFromCart }) => {
     item.images?.[0]?.image_url ??
     "/images/no-image.png";
 
+  const price = item.price;
+
   return (
     <div className="flex items-center justify-between gap-5">
       <div className="w-full flex items-center gap-6">
@@ -24,9 +26,10 @@ const SingleItem = ({ item, removeItemFromCart }) => {
 
         <div>
           <h3 className="font-medium text-dark mb-1 ease-out duration-200 hover:text-blue">
-            <a href="#"> {item.name} </a>
+            <a href= {item.url}> {item.name} </a>
           </h3>
-          <p className="text-custom-sm">Price: ${item.finalPrice}</p>
+          <p className="text-custom-sm">Quantidade: {item.quantity}</p>
+          <b><p className="text-custom-sm">Preço: R${price.toFixed(2)}</p></b>
         </div>
       </div>
 

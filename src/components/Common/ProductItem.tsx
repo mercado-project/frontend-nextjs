@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import Link from "next/link";
 
-const ProductItem = ({ item }: { item: Product }) => {
+const ProductItem = ({ item }: { item }) => {
   const { openModal } = useModalContext();
 
   const dispatch = useDispatch<AppDispatch>();
@@ -21,15 +21,40 @@ const ProductItem = ({ item }: { item: Product }) => {
     dispatch(updateQuickView({ ...item }));
   };
 
+  const rawPrice =
+  item.prices?.find((p: any) => p.price)?.price ?? "0";
+
+  const numericPrice = Number(rawPrice);
+
+
+  const priceFromApi =
+  item.prices?.[0]?.price ?? "0";
+
+const normalizedPrice = Number(priceFromApi);
+
   // add to cart
   const handleAddToCart = () => {
     dispatch(
       addItemToCart({
-        ...item,
+        id: item.id,
+        name: item.name,
+        url: item.url,
+        price: normalizedPrice,
         quantity: 1,
+        images:
+          item.images?.find((img: any) => img.is_main)?.image_url ??
+          item.images?.[0]?.image_url ??
+          "/images/no-image.png",
       })
     );
-  };
+  }
+
+
+
+
+
+
+
 
   const handleItemToWishList = () => {
     dispatch(

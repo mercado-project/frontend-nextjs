@@ -29,14 +29,23 @@ const QuickViewModal = () => {
     openPreviewModal();
   };
 
+const priceFromApi =
+  product.price?.[0]?.price ?? "0";
+
+const normalizedPrice = Number(priceFromApi);
+
   // add to cart
   const handleAddToCart = () => {
-    dispatch(
-      addItemToCart({
-        ...product,
-        quantity,
-      })
-    );
+dispatch(
+  addItemToCart({
+    id: product.id,
+    name: product.name,
+    url: product.url,
+    price: normalizedPrice, // ✅ NUMBER
+    quantity: 1,
+    images: [product.images],
+  })
+);
 
     closeModal();
   };
