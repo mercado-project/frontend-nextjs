@@ -14,13 +14,13 @@ const QuickViewModal = () => {
   const { isModalOpen, closeModal } = useModalContext();
   const { openPreviewModal } = usePreviewSlider();
   const [quantity, setQuantity] = useState(1);
+  const [activePreview, setActivePreview] = useState(0);
 
   const dispatch = useDispatch<AppDispatch>();
 
-  // get the product data
-  const product = useAppSelector((state) => state.quickViewReducer.value);
-
-  const [activePreview, setActivePreview] = useState(0);
+  const product = useAppSelector(
+    (state) => state.quickViewReducer.value
+  );
 
   // preview modal
   const handlePreviewSlider = () => {
@@ -29,26 +29,22 @@ const QuickViewModal = () => {
     openPreviewModal();
   };
 
-const priceFromApi =
-  product.price?.[0]?.price ?? "0";
-
-const normalizedPrice = Number(priceFromApi);
-
   // add to cart
-  const handleAddToCart = () => {
-dispatch(
-  addItemToCart({
-    id: product.id,
-    name: product.name,
-    url: product.url,
-    price: normalizedPrice, // ✅ NUMBER
-    quantity: 1,
-    images: [product.images],
-  })
-);
+const handleAddToCart = () => {
+  dispatch(
+    addItemToCart({
+      id: product.id,
+      name: product.name,
+      url: product.url,
+      price: product.finalPrice,
+      quantity,
+      images: product.images,
+    })
+  );
 
-    closeModal();
-  };
+  closeModal();
+};
+
 
   useEffect(() => {
     // closing modal while clicking outside
@@ -68,6 +64,16 @@ dispatch(
       setQuantity(1);
     };
   }, [isModalOpen, closeModal]);
+
+  if (!product) {
+    return (
+      <div
+        className={`${
+          isModalOpen ? "z-99999" : "hidden"
+        } fixed inset-0 bg-dark/70`}
+      />
+    );
+  }
 
   return (
     <div
@@ -130,10 +136,11 @@ dispatch(
                     </button>
 
                     <Image
-                      src={product?.images[0]}
-                      alt="products-details"
-                      width={400}
-                      height={400}
+                      className="w-full h-[450px]"
+                      src={product.images[activePreview] ?? product.images[0]}
+                      alt={product.name}
+                      width={450}
+                      height={450}
                     />
                   </div>
                 </div>
@@ -307,11 +314,14 @@ dispatch(
 
                   <span className="flex items-center gap-2">
                     <span className="font-semibold text-dark text-xl xl:text-heading-4">
-                      ${product.finalPrice}
+                      R$ {product.finalPrice.toFixed(2)}
                     </span>
-                    <span className="font-medium text-dark-4 text-lg xl:text-2xl line-through">
-                      ${product.price}
-                    </span>
+
+                    {product.finalPrice !== product.price && (
+                      <span className="font-medium text-dark-4 text-lg xl:text-2xl line-through">
+                        R$ {product.price.toFixed(2)}
+                      </span>
+                    )}
                   </span>
                 </div>
 

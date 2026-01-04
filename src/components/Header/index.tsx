@@ -124,7 +124,14 @@ const Header = () => {
             </Link>
 
             <div className="max-w-[475px] w-full">
-              <form>
+              <form onSubmit={(e) => {
+                e.preventDefault();
+
+                if (!searchQuery.trim()) return;
+
+                router.push(`/search?w=${encodeURIComponent(searchQuery)}`);
+              }}>
+
                 <div className="flex items-center">
                   {/* <CustomSelect options={options} /> */}
 
@@ -143,9 +150,10 @@ const Header = () => {
                     />
 
                     <button
-                      id="search-btn"
+                      type="submit"
                       aria-label="Search"
-                      className="flex items-center justify-center absolute right-3 top-1/2 -translate-y-1/2 ease-in duration-200 hover:text-blue"
+                      className="flex items-center justify-center absolute right-3 top-1/2 -translate-y-1/2"
+                      id="search-btn"
                     >
                       <svg
                         className="fill-current"

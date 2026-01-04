@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Breadcrumb from "../Common/Breadcrumb";
 import CustomSelect from "./CustomSelect";
 import CategoryDropdown from "./CategoryDropdown";
@@ -30,6 +30,10 @@ export default function ShopWithSidebar({ category, products }) {
     { label: "Sort by Price (Low to High)", value: "low" },
     { label: "Sort by Price (High to Low)", value: "high" },
   ];
+
+  useEffect(() => {
+    setFilteredProducts(products);
+  }, [products]);
 
   return (
     <>
@@ -129,9 +133,14 @@ export default function ShopWithSidebar({ category, products }) {
               <div>
                 {productStyle === "grid" ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {products.map((product) => (
+                    {/* {products.map((product) => (
+                      <SingleGridItem key={product.id} item={product} />
+                    ))} */}
+
+                    {filteredProducts.map((product) => (
                       <SingleGridItem key={product.id} item={product} />
                     ))}
+                    
                   </div>
                 ) : (
                   <div className="flex flex-col gap-6">

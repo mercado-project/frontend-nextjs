@@ -4,7 +4,7 @@ const Billing = () => {
   return (
     <div className="mt-9">
       <h2 className="font-medium text-dark text-xl sm:text-2xl mb-5.5">
-        Billing details
+        Detalhes da Entrega
       </h2>
 
       <div className="bg-white shadow-1 rounded-[10px] p-4 sm:p-8.5">

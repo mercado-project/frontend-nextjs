@@ -9,3 +9,24 @@ export async function getProductsByCategory(categoryId: number) {
   if (!res.ok) return [];
   return res.json();
 }
+
+export async function searchProducts(query: string) {
+  const res = await fetch(
+    `http://localhost:3002/products/search?w=${query}`, { cache: "no-store" });
+
+  if (!res.ok) {
+    throw new Error("Erro ao buscar produtos");
+  }
+
+  return res.json();
+}
+
+export async function getBanners() {
+  const res = await fetch("http://localhost:3002/cms/banners/active", {
+    cache: "no-store",
+  });
+
+  if (!res.ok) return [];
+
+  return res.json();
+}
